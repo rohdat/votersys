@@ -5,5 +5,38 @@
 </head>
 <body>
 	<h1>{{topic}}</h1>
+	<table>
+		<tr>
+			<td class="status">
+				Current Status
+			</td>
+		</tr>
+		<tr>
+			<td class="status">
+				FOR
+			</td>
+			<td>
+				{{votesfor}}
+			</td>
+		</tr>
+		<tr>
+			<td class="status">
+				AGAINST
+			</td>
+			<td>
+				{{votesagainst}}
+			</td>
+		</tr>
+	</table>
+	<br>
+	<hr>
+	<br>
+	<br>
+
+		<form method="post">
+		<input type="radio" name="choice" value="yes">Vote YES!<br>
+		<input type="radio" name="choice" value="no">Vote NO!<br>
+		<input type="submit" name="vote" value="VOTE"><br>
+		</form>
 </body>
 </html>

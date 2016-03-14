@@ -28,4 +28,5 @@ class MainHandler(webapp2.RequestHandler):
 app = webapp2.WSGIApplication([
     ('/', VoterHandler),
     ('/newvote/?', NewVoteHandler),
+    ('/newvote/?([a-zA-Z0-9\-]+)?/?', VotePageHandler),
 ], debug=True)

@@ -77,7 +77,7 @@ class Topic(ndb.Model):
 
 	@classmethod
 	def create(cls, name, votermax):
-		return Topic(name=name, votermax=votermax)
+		return Topic(name=name, votermax=votermax, pro=0, con= 0)
 
 
 	def get_result():
@@ -124,13 +124,32 @@ class NewVoteHandler(Handler):
 	def get(self):
 		self.render("newvote.html")
 
+
 	def post(self):
 		topic = self.request.get("topic")
 		votermax = int(self.request.get("votermax"))
-
-		t = Topic(name=topic, votermax=votermax)
+		t = Topic(name=topic, votermax=votermax, pro=0, con=0)
 		t_key = t.put()
-		t_id = t_key.id()
+		t_id = t_key.urlsafe()
 		logging.error("Key=%s"%t_id)
 		self.redirect("/newvote/%s"%t_id)
 
+class VotePageHandler(Handler):
+
+	def get_item(self,urlkey):
+		return ndb.Key(urlsafe=urlkey).get()
+
+	def get(self, urlkey):
+		t = self.get_item(urlkey)
+		self.render("votepage.html", votesfor= t.pro, votesagainst = t.con)
+
+	def post(self, urlkey):
+		t = self.get_item(urlkey)
+		choice = self.request.get("choice")
+		if choice == "yes":
+			t.pro = int(t.pro) + 1
+		elif choice == "no":
+			t.con = int(t.con) + 1
+		t.put()
+		self.render("votepage.html", votesfor= t.pro, votesagainst = t.con)
+		self.write("Thank you for voting! Every vote counts!")
